@@ -1,13 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <RootNamespace>AdventOfCode_2018</RootNamespace>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>AdventOfCode_2018</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="Day1/day1.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-
 </Project>
