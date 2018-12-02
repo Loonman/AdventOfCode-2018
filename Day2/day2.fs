@@ -61,6 +61,7 @@ module Day2 =
                         distArray.[i-1, j-1] + 1]
                     )
         distArray.[strOne.Length, strTwo.Length]
+        
     let isEditDistance1 (boxes:seq<string>) (box:string) : bool=
         let levDist2 = levDist box
         let contains1 = Seq.contains 1
@@ -90,8 +91,6 @@ module Day2 =
         |> List.toArray 
         |> System.String
         
-
-
     let main argv =
         let strings = "day2\\input.txt" |> readLines
         let twoPeat, threePeat = hasNRepeatedChar strings 2, hasNRepeatedChar strings 3
