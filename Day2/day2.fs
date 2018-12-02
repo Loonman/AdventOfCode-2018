@@ -10,37 +10,38 @@ module Day2 =
         while not sr.EndOfStream do
             yield sr.ReadLine()
     }
-
+    type stringChars = (string*seq<char>)
     let countCharOccurence (str:string) (c:char) : int32=
         str
         |> Seq.filter (fun x' -> x' = c)
         |> Seq.length
 
-    let distinctChars (str:string) = seq {
-        Seq.toList str |> Seq.distinct
-    }
+    let countCharOccurences (sc:stringChars) : seq<int32>=
+        let str, c = sc
+        let func2 = countCharOccurence str
+        c |> Seq.map func2
 
-     let boolToNum b : int32= 
-        match b with
-        | true -> 1
-        | false -> 0
+    let distinctChars (str:string) = 
+        Seq.toList str |> Seq.distinct
+
+    let boolToNum b : int32= 
+       match b with
+       | true -> 1
+       | false -> 0
 
     let sumBools (b:seq<bool>) : int32=
         let nums = b |> Seq.map boolToNum
         nums |> Seq.sum
 
     let hasNRepeatedChar (strings:seq<string>) (n:int32) : int32=
+        let containsN = Seq.contains n
         let chars = strings |> Seq.map distinctChars
-        let stringsAndChars = Seq.zip strings chars
-        let counts =
-            match stringsAndChars with
-            | (s, c) -> countCharOccurence s c 
-        let result =
-            match counts with
-            | c -> Seq.contains n
-        result |> sumBools
+        Seq.zip strings chars
+        |> Seq.map countCharOccurences 
+        |> Seq.map containsN
+        |> sumBools
 
     let main argv =
         let strings = "day2\\input.txt" |> readLines
         let twoPeat, threePeat = hasNRepeatedChar strings 2, hasNRepeatedChar strings 3
-        printf "%i" twoPeat * threePeat
+        printf "%i" (twoPeat * threePeat)
