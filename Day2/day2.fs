@@ -33,14 +33,17 @@ module Day2 =
         let nums = b |> Seq.map boolToNum
         nums |> Seq.sum
 
-    let hasNRepeatedChar (strings:seq<string>) (n:int32) : int32=
+    let hasNRepeatedChar (boxes:seq<string>) (n:int32) : int32=
         let containsN = Seq.contains n
-        let chars = strings |> Seq.map distinctChars
-        Seq.zip strings chars
+        let chars = boxes |> Seq.map distinctChars
+        Seq.zip boxes chars
         |> Seq.map countCharOccurences 
         |> Seq.map containsN
         |> sumBools
 
+    let findCorrectBoxes (boxes:seq<string>) : string =
+
+        "abc"
     let main argv =
         let strings = "day2\\input.txt" |> readLines
         let twoPeat, threePeat = hasNRepeatedChar strings 2, hasNRepeatedChar strings 3
