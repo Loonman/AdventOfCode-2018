@@ -5,7 +5,7 @@ open System
 open System.IO
 open System.Text.RegularExpressions
 
-module Day1 =
+module Day4 =
     let readLines (filePath:string) = seq {
         use sr = new StreamReader(filePath)
         while not sr.EndOfStream do
