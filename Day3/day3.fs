@@ -18,10 +18,12 @@ module Day3 =
     top:int32; 
     width:int32; 
     height:int32}
+    
     let (|Regex|_|) pattern input =
         let m = Regex.Match(input, pattern)
         if m.Success then Some(List.tail [ for g in m.Groups -> g.Value ])
         else None
+
     let claimFromString claimStr = 
         match claimStr with
         | Regex @"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)" [id; left; top; width; height] ->
@@ -32,6 +34,7 @@ module Day3 =
         | 0 -> 0
         | 1 -> 0
         | _ -> 1
+
     let getOverlaps (claims:list<claim>) =
         let (claimsArray : int[,]) = Array2D.zeroCreate (1000) (1000)
 
@@ -46,6 +49,10 @@ module Day3 =
         |> Seq.cast<int> 
         |> Seq.map greaterThanOne
         |> Seq.sum
+
+    let getNonOverlapping claim (claims:list<claim) =
+        0
+
     let main (argv) = 
         let claims = "day3\\input.txt" |> readLines |> Seq.map claimFromString |> Seq.toList
         let res = getOverlaps claims
