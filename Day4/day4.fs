@@ -14,7 +14,6 @@ module Day1 =
 
     let main (argv) = 
         let claims = "day4\\input.txt" |> readLines
-s
         0
 
 
