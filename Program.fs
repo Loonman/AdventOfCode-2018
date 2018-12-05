@@ -8,5 +8,7 @@ let main argv =
     printfn "Hello World from F#!"
     //Day1.main(1)
     //Day2.main()
-    Day3.main()
+    //Day3.main()
+    //Day4.main()
+    Day5.main()
     0 // return an integer exit code
