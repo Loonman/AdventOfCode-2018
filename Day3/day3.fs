@@ -34,29 +34,41 @@ module Day3 =
         | 0 -> 0
         | 1 -> 0
         | _ -> 1
-
-    let getOverlaps (claims:list<claim>) =
-        let (claimsArray : int[,]) = Array2D.zeroCreate (1000) (1000)
+    let getFabric (claims:list<claim>) =
+        let (fabric : int[,]) = Array2D.zeroCreate (1000) (1000)
 
         for i = 0 to (List.length claims) - 1 do
             for x = claims.[i].left to claims.[i].left + claims.[i].width - 1 do
                 for y = claims.[i].top to claims.[i].top + claims.[i].height - 1 do
-                    try
-                        claimsArray.[x,y] <- claimsArray.[x,y] + 1;
-                    with
-                    | :? System.IndexOutOfRangeException as ex -> printfn "#%d @ %d,%d: %dx%d %d %d\r\n" claims.[i].id claims.[i].left claims.[i].top claims.[i].width claims.[i].height x y
-        claimsArray 
+                    fabric.[x,y] <- fabric.[x,y] + 1;
+        fabric 
+    let getOverlaps (claims:list<claim>) =
+        getFabric claims
         |> Seq.cast<int> 
         |> Seq.map greaterThanOne
         |> Seq.sum
 
-    let getNonOverlapping claim (claims:list<claim) =
-        0
+    let getNonOverlappingClaim (claims:list<claim>) =
+        let fabric = getFabric claims
+        let mutable res = -1
+        for i = 0 to (List.length claims) - 1 do
+            let mutable overlap = false
+            for x = claims.[i].left to claims.[i].left + claims.[i].width - 1 do
+                for y = claims.[i].top to claims.[i].top + claims.[i].height - 1 do
+                    overlap <- match fabric.[x,y] with
+                                | 1 -> overlap
+                                | _ -> true
+            res <- match overlap with 
+                    | false -> claims.[i].id
+                    | true -> res
+        res
 
     let main (argv) = 
         let claims = "day3\\input.txt" |> readLines |> Seq.map claimFromString |> Seq.toList
         let res = getOverlaps claims
         printfn "%d\r\n" res
+        let correctSwatch = getNonOverlappingClaim claims
+        printfn "%d\r\n" correctSwatch
         0
 
 
