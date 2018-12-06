@@ -28,7 +28,6 @@ module Day5 =
             Char.ToLower c1
 
     let rec processPolyString (polymer:string) (idx:int) (len:int) =
-        
         if idx = len - 1 then
             polymer
         else
