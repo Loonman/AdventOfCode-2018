@@ -16,7 +16,7 @@ module Day9 =
     let runGame (players:int) (finalMarble:int) = 
         let (scores : int[]) = Array.zeroCreate(players)
         let mutable (gameState:List<int>) = new List<int>()
-
+        //This is where the magic happens
         scores |> Array.toSeq |> Seq.max
         
     let main (argv) = 
