@@ -47,6 +47,13 @@ module Day7 =
             for vals in dep.Value do
                 printfn "%s, " vals
             printfn "\r\n"
+    let rec getCompletionOrder  (complete:List<String>) (map:Map<string, string list>):String =
+
+
+        match complete.Length with
+        | 26 -> complete |> List.fold (+) ""
+        | _ -> //This is where the magic happens
+            getCompletionOrder complete map
 
     // 1. Create dictionary of type {Node, Dependencies}
     // 2. Find the Node(s) for which Dependencies is empty
@@ -59,13 +66,15 @@ module Day7 =
         //The alphabet is our set of dictionary keys
         let alphabet = [|'A'..'Z'|] |> Array.map Char.ToString
         let fillAlphabet = fillMissingKeys alphabet
+        let getCompletionOrderEnter = getCompletionOrder List.Empty
         //Get individual dependencies
         "day7\\input.txt" 
         |> readLines 
         |> Seq.map processNode 
         |> buildDependencyMap 
         |> fillAlphabet
-        |> printMap
+        |> getCompletionOrderEnter
+        |> printfn "%s\r\n"
         0
 
 
