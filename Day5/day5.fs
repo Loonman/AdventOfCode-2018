@@ -61,6 +61,7 @@ module Day5 =
         let res1 = "day5\\input.txt" |> readLines  |> Seq.exactlyOne |> processPolymer |> String.length
         let res2 = "day5\\input.txt" |> readLines  |> Seq.exactlyOne |> efficientProcessPoly
         printfn "%d %d\r\n" res1 res2
+        0
 
 
 

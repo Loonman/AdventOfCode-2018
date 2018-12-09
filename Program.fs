@@ -12,6 +12,6 @@ let main argv =
     //Day4.main()
     // Day5.main()
     // Day6.main()
-    // Day7.main()
-    Day8.main()
+    Day7.main()
+    //Day8.main()
     0 // return an integer exit code
