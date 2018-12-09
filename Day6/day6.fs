@@ -12,7 +12,7 @@ module Day6 =
             yield sr.ReadLine()
     }
     type point = {x:int; y:int}
-    let inline (+) a:point b:point =
+    let inline (+) (a:point) (b:point) =
         {x = a.x + b.x; y = a.y + b.y}
         
     //A node is bounded by an edge if it's orthogonal distance to that edge is equal to or less than its edgewise distance from the nearest point on that edge
