@@ -43,17 +43,45 @@ module Day7 =
 
     let printMap (map:Map<string, string list>):Unit =
         for dep in map do
-            printfn "%s depends on" dep.Key
+            printf "%s depends on " dep.Key
             for vals in dep.Value do
-                printfn "%s, " vals
-            printfn "\r\n"
-    let rec getCompletionOrder  (complete:List<String>) (map:Map<string, string list>):String =
+                printf "%s, " vals
+            printfn ""
 
+    let getEmptyDependencies (map:Map<string, string list>) (keys) =
+        let add lst key =
+            let value =
+                match Map.tryFind key map with
+                | Some a -> match a.IsEmpty with
+                            | true -> List.singleton key
+                            | false -> []
+                | None -> List.singleton key
+            List.append lst value
+        List.fold add List.Empty keys
+    let removeCompleteDependencies (map:Map<string, string list>) (keys) (keysToRemove)=
+        let remove emptyMap key =
+            let value =
+                match Map.tryFind key map with
+                | Some list -> List.filter (fun x -> not (List.contains x keysToRemove)) list
+                | None -> []
+            Map.add key value emptyMap
+        Seq.fold remove Map.empty keys
 
+    let rec getCompletionOrder  (complete:List<String>) (keys:List<String>) (map:Map<string, string list>):String =
+        
         match complete.Length with
         | 26 -> complete |> List.fold (+) ""
         | _ -> //This is where the magic happens
-            getCompletionOrder complete map
+            printMap map
+            printfn "Keys: %s\r\n" (keys |> List.fold (+) "")
+            printfn "Complete: %s\r\n" (complete |> List.fold (+) "")
+            let newComplete = getEmptyDependencies map keys |> List.sort |> List.take 1
+            printfn "newComplete: %s\r\n" (newComplete |> List.fold (+) "")
+            let mapWithRemovedDeps = removeCompleteDependencies map keys newComplete
+            let completeState = List.append complete newComplete
+            let newMap = Map.remove newComplete.[0] mapWithRemovedDeps
+            let newKeys = List.filter (fun x -> x <> newComplete.[0]) keys
+            getCompletionOrder completeState newKeys newMap
 
     // 1. Create dictionary of type {Node, Dependencies}
     // 2. Find the Node(s) for which Dependencies is empty
@@ -64,9 +92,9 @@ module Day7 =
     // 7. Goto 4
     let main (argv) = 
         //The alphabet is our set of dictionary keys
-        let alphabet = [|'A'..'Z'|] |> Array.map Char.ToString
+        let alphabet = [|'A'..'Z'|] |> Array.map Char.ToString |> Array.toList
         let fillAlphabet = fillMissingKeys alphabet
-        let getCompletionOrderEnter = getCompletionOrder List.Empty
+        let getCompletionOrderEnter = getCompletionOrder List.Empty alphabet
         //Get individual dependencies
         "day7\\input.txt" 
         |> readLines 
