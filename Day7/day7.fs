@@ -67,7 +67,7 @@ module Day7 =
             Map.add key value emptyMap
         Seq.fold remove Map.empty keys
 
-    let rec getCompletionOrder  (complete:List<String>) (keys:List<String>) (map:Map<string, string list>):String =
+    let rec getCompletionOrderPart1 (complete:List<String>) (keys:List<String>) (map:Map<string, string list>):String =
         
         match complete.Length with
         | 26 -> complete |> List.fold (+) ""
@@ -81,7 +81,23 @@ module Day7 =
             let completeState = List.append complete newComplete
             let newMap = Map.remove newComplete.[0] mapWithRemovedDeps
             let newKeys = List.filter (fun x -> x <> newComplete.[0]) keys
-            getCompletionOrder completeState newKeys newMap
+            getCompletionOrderPart1 completeState newKeys newMap
+
+    let rec getCompletionOrderPart2 (complete:List<String>) (keys:List<String>) (map:Map<string, string list>):String =
+        
+        match complete.Length with
+        | 26 -> complete |> List.fold (+) ""
+        | _ -> //This is where the magic happens
+            printMap map
+            printfn "Keys: %s\r\n" (keys |> List.fold (+) "")
+            printfn "Complete: %s\r\n" (complete |> List.fold (+) "")
+            let newComplete = getEmptyDependencies map keys |> List.sort 
+            printfn "newComplete: %s\r\n" (newComplete |> List.fold (+) "")
+            let mapWithRemovedDeps = removeCompleteDependencies map keys newComplete
+            let completeState = List.append complete newComplete
+            let newMap = Map.remove newComplete.[0] mapWithRemovedDeps
+            let newKeys = List.filter (fun x -> x <> newComplete.[0]) keys
+            getCompletionOrderPart2 completeState newKeys newMap
 
     // 1. Create dictionary of type {Node, Dependencies}
     // 2. Find the Node(s) for which Dependencies is empty
@@ -94,14 +110,24 @@ module Day7 =
         //The alphabet is our set of dictionary keys
         let alphabet = [|'A'..'Z'|] |> Array.map Char.ToString |> Array.toList
         let fillAlphabet = fillMissingKeys alphabet
-        let getCompletionOrderEnter = getCompletionOrder List.Empty alphabet
+        let getCompletionOrderEnter1 = getCompletionOrderPart1 List.Empty alphabet
+        let getCompletionOrderEnter2 = getCompletionOrderPart1 List.Empty alphabet
         //Get individual dependencies
         "day7\\input.txt" 
         |> readLines 
         |> Seq.map processNode 
         |> buildDependencyMap 
         |> fillAlphabet
-        |> getCompletionOrderEnter
+        |> getCompletionOrderEnter1
+        |> printfn "%s\r\n"
+
+        //Get individual dependencies
+        "day7\\input.txt" 
+        |> readLines 
+        |> Seq.map processNode 
+        |> buildDependencyMap 
+        |> fillAlphabet
+        |> getCompletionOrderEnter2
         |> printfn "%s\r\n"
         0
 
